@@ -2,7 +2,8 @@
 - hosts: all
   remote_user: root
   vars:
-    gitpath: /home/pi/git
+    gitPath: /home/pi/git
+    piGenPath: "{{ gitPath }}/pi-gen"
 
   tasks:
     - name: Install dependencies
@@ -29,7 +30,7 @@
           - git
           - curl
           - vim
-          - apt-cacherc
+          - apt-cacher-ng
         state: present
 
     # https://stackoverflow.com/a/37334415
@@ -61,15 +62,21 @@
     - name: Clone repo
       git:
         repo: https://github.com/arobb/pi-gen.git
-        dest: "{{ gitpath }}"
+        dest: "{{ piGenPath }}"
+        version: sensor-pod
 
-    - name: Check that the config exists
-      stat:
-        path: "{{ gitpath }}/pi-gen/config"
-      register: stat_result
-
-    - name: Create the config file, if it doesnt exist already
+    - name: Create the config file
       file:
-        path: "{{ gitpath }}/pi-gen/config"
+        path: "{{ piGenPath }}/config"
         state: touch
-      when: stat_result.stat.exists == False
+
+    - name: Create stage touch files
+      file:
+        path: "{{ item }}"
+        state: touch
+      with_items:
+        - "{{ piGenPath }}/stage3/SKIP"
+        - "{{ piGenPath }}/stage4/SKIP"
+        - "{{ piGenPath }}/stage5/SKIP"
+        - "{{ piGenPath }}/stage4/SKIP_IMAGES"
+        - "{{ piGenPath }}/stage5/SKIP_IMAGES"
