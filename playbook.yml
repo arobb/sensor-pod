@@ -9,28 +9,28 @@
     - name: Install dependencies
       apt:
         pkg:
-          - sudo
-          - build-essential
-          - module-assistant
-          - quilt
-          - parted
-          - realpath
-          - qemu-user-static
-          - debootstrap
-          - zerofree
-          - pxz
-          - zip
-          - dosfstools
+          - apt-cacher-ng
           - bsdtar
-          - libcap2-bin
-          - grep
-          - rsync
-          - xz-utils
+          - coreutils
+          - curl
+          - debootstrap
+          - dosfstools
           - file
           - git
-          - curl
+          - grep
+          - kmod
+          - libcap2-bin
+          - parted
+          - qemu-user-static
+          - quilt
+          - rsync
+          - sudo
+          - udev
           - vim
-          - apt-cacher-ng
+          - xxd
+          - xz-utils
+          - zerofree
+          - zip
         state: present
 
     # https://stackoverflow.com/a/37334415
@@ -80,3 +80,17 @@
         - "{{ piGenPath }}/stage5/SKIP"
         - "{{ piGenPath }}/stage4/SKIP_IMAGES"
         - "{{ piGenPath }}/stage5/SKIP_IMAGES"
+
+    - name: Set apt proxy
+      lineinfile:
+        dest: "{{ piGenPath }}/config"
+        state: present
+        regexp: '^APT_PROXY=.*$'
+        line: 'APT_PROXY=http://127.0.0.1:3142'
+
+    - name: Set output image name
+      lineinfile:
+        dest: "{{ piGenPath }}/config"
+        state: present
+        regexp: '^IMG_NAME=.*$'
+        line: "IMG_NAME='raspbian-sensor-pod'"
