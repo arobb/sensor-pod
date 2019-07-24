@@ -71,6 +71,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose = "v"
     ansible.become = true
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "build-playbook.yml"
   end
 end
