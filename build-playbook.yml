@@ -2,7 +2,7 @@
 - hosts: all
   remote_user: root
   vars:
-    gitPath: /home/pi/git
+    gitPath: /git
     piGenPath: "{{ gitPath }}/pi-gen"
 
   tasks:
@@ -33,31 +33,31 @@
           - zip
         state: present
 
-    # https://stackoverflow.com/a/37334415
-    - name: Make sure we have a 'wheel' group
-      group:
-        name: wheel
-        state: present
-
-    - name: Allow 'wheel' group to have passwordless sudo
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        regexp: '^%wheel'
-        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-        validate: 'visudo -cf %s'
-
-    # https://stackoverflow.com/a/19318368
-    # openssl passwd -salt <salt> -1 <plaintext>
-    # openssl passwd -salt 'My$@1t' -1 'raspberry'
-    - name: Configure pi user account
-      user:
-        name: pi
-        password: $1$My$@1t$g3URvhJ2y71Ol3qDP86fV1
-        groups: wheel
-        append: yes
-        state: present
-        createhome: yes
+    # # https://stackoverflow.com/a/37334415
+    # - name: Make sure we have a 'wheel' group
+    #   group:
+    #     name: wheel
+    #     state: present
+    #
+    # - name: Allow 'wheel' group to have passwordless sudo
+    #   lineinfile:
+    #     dest: /etc/sudoers
+    #     state: present
+    #     regexp: '^%wheel'
+    #     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    #     validate: 'visudo -cf %s'
+    #
+    # # https://stackoverflow.com/a/19318368
+    # # openssl passwd -salt <salt> -1 <plaintext>
+    # # openssl passwd -salt 'My$@1t' -1 'raspberry'
+    # - name: Configure pi user account
+    #   user:
+    #     name: pi
+    #     password: $1$My$@1t$g3URvhJ2y71Ol3qDP86fV1
+    #     groups: wheel
+    #     append: yes
+    #     state: present
+    #     createhome: yes
 
     - name: Clone repo
       git:
