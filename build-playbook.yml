@@ -16,7 +16,6 @@
           - debootstrap
           - dosfstools
           - file
-          - git
           - grep
           - kmod
           - libcap2-bin
@@ -24,14 +23,19 @@
           - qemu-user-static
           - quilt
           - rsync
-          - sudo
           - udev
-          - vim
           - xxd
           - xz-utils
           - zerofree
           - zip
         state: present
+
+    - name: Install debug dependencies
+        apt:
+          pkg:
+          - git
+          - sudo
+          - vim
 
     # # https://stackoverflow.com/a/37334415
     # - name: Make sure we have a 'wheel' group
