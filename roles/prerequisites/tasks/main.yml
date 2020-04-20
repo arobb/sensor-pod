@@ -4,6 +4,7 @@
     pkg:
       - apt-cacher-ng
       - apt-transport-https
+      - bc
       - bsdtar
       - ca-certificates
       - coreutils
