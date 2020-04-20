@@ -3,11 +3,12 @@
   hosts: all
   roles:
     - prerequisites
-    - vagrant-raspbian-build
+    - vagrant-raspbian-build-sensor-pod
     - vagrant-raspbian-build-enable-ssh
   remote_user: root
   vars:
     gitPath: /git
     piGenPath: "{{ gitPath }}/pi-gen"
+    branch: sensor-pod
   vars_files:
     - "{{ playbook_dir }}/config.yml"
