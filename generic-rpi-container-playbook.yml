@@ -1,0 +1,9 @@
+---
+- name: Playbook to set up a Raspbian container for testing
+  hosts: all
+  roles:
+    - prerequisites
+    # - raspbian-vm
+  remote_user: root
+  vars_files:
+    - "{{ playbook_dir }}/config.yml"

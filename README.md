@@ -3,6 +3,9 @@ Run the Vagrant commands to start a Vagrant VM running Debian, use that to build
 
 See https://github.com/arobb/pi-gen for the build details.
 
+## Note
+The content of this project is copied to `/vagrant` on the VM.
+
 ## Vagrant Build
 ```
 vagrant ssh -c 'sudo -i bash -c "whoami; cd /git/pi-gen; pwd; ./build.sh"'
@@ -18,30 +21,28 @@ https://stackoverflow.com/a/33978666
 ```
 # Uncomment config.vm.synced_folder line in Vagrantfile
 # Context: Host terminal
-vagrant up \
-&& vagrant ssh -c 'sudo apt update && sudo apt -y dist-upgrade' \
-&& vagrant plugin install vagrant-vbguest \
-&& vagrant reload \
+vagrant plugin install vagrant-vbguest \
+&& vagrant plugin install vagrant-reload
+
+START=generic vagrant up \
 && vagrant ssh
 
 # Context: Vagrant VM
-sudo su -
-apt-get install qemu-user-static
-curl https://get.docker.com/ | sh
-
-sudo docker run -ti \
+sudo docker run -ti --rm \
   --publish 2022:22 \
   --volume /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static \
   --volume /host_ssh_keys:/host_ssh_keys \
+  --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  --cap-add SYS_ADMIN \
   schachr/raspbian-stretch:latest \
-  bash
+  /bin/bash
 
 # Context: Raspbian guest inside the Vagrant VM
 echo 'Acquire::http::Proxy "http://192.168.11.13:3142";' > /etc/apt/apt.conf \
 && apt update \
 && apt install -y openssh-server python \
 && service ssh start \
-&& mkdir -p ~/.ssh; cat /host_ssh_keys/id_rsa.pub >> ~/.ssh/authorized_keys
+&& mkdir -p ~/.ssh; cat /host_ssh_keys/host_id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Context: Back on a host terminal
 sed -i '' '/^\[localhost/ d' ~/.ssh/known_hosts; \

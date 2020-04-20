@@ -1,0 +1,40 @@
+- name: Clone repo
+  git:
+    repo: https://github.com/arobb/pi-gen.git
+    dest: "{{ piGenPath }}"
+    version: sensor-pod
+
+- name: Create the config file
+  file:
+    path: "{{ piGenPath }}/config"
+    state: touch
+
+- name: Create stage touch files
+  file:
+    path: "{{ item }}"
+    state: touch
+  with_items:
+    - "{{ piGenPath }}/stage3/SKIP"
+    - "{{ piGenPath }}/stage4/SKIP"
+    - "{{ piGenPath }}/stage5/SKIP"
+    - "{{ piGenPath }}/stage4/SKIP_IMAGES"
+    - "{{ piGenPath }}/stage5/SKIP_IMAGES"
+
+- name: Set up apt conf
+  shell: echo 'Acquire::http::Proxy "{{ apt_proxy }}";' > /etc/apt/apt.conf
+  when: apt_proxy is defined
+
+- name: Set apt proxy in Pi Gen file
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^APT_PROXY=.*$'
+    line: "APT_PROXY={{ apt_proxy }}"
+  when: apt_proxy is defined
+
+- name: Set output image name
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^IMG_NAME=.*$'
+    line: "IMG_NAME='raspbian-sensor-pod'"

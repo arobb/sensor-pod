@@ -1,0 +1,67 @@
+---
+- name: Install dependencies
+  apt:
+    pkg:
+      - apt-cacher-ng
+      - apt-transport-https
+      - bsdtar
+      - ca-certificates
+      - coreutils
+      - curl
+      - debootstrap
+      - dosfstools
+      - file
+      - gnupg2
+      - grep
+      - kmod
+      - libcap2-bin
+      - parted
+      - qemu-user-static
+      - quilt
+      - rsync
+      - software-properties-common
+      - udev
+      - xxd
+      - xz-utils
+      - zerofree
+      - zip
+    state: present
+
+- name: Install debug dependencies
+  apt:
+    pkg:
+      - git
+      - sudo
+      - vim
+
+- name: Include alias preferences
+  copy:
+    src: alias-ll.sh
+    dest: /etc/profile.d/
+    mode: 0644
+
+- name: Add Docker Apt GPG key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Get OS release name
+  command: "lsb_release -cs"
+  register: release_output
+
+- name: Store OS release in proper variable
+  set_fact:
+    release_name: "{{ release_output.stdout }}"
+
+- name: Add Docker Apt Repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ release_name }} stable"
+    update_cache: yes
+    state: present
+
+- name: Install Docker
+  apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io

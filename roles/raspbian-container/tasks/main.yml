@@ -1,0 +1,23 @@
+---
+- name: Set up apt conf
+  shell: echo 'Acquire::http::Proxy "{{ apt_proxy }}";' > /etc/apt/apt.conf
+  when: apt_proxy is defined
+
+- name: SSH and Python
+  apt:
+    name: ['openssh-server', 'python']
+    update_cache: yes
+    state: present
+
+- name: Ensure SSH is running
+  service:
+    name: ssh
+    state: started
+
+- name: Copy host public SSH key into the container
+  copy:
+    src: /host_ssh_keys/id_rsa.pub
+    path: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: '0600'

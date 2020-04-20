@@ -1,0 +1,33 @@
+---
+- hosts: all
+  vars_files:
+    - "{{ playbook_dir }}/config.yml"
+
+  tasks:
+    - name: Set up apt conf
+      shell: echo 'Acquire::http::Proxy "{{ apt_proxy }}";' > /etc/apt/apt.conf
+      when: apt_proxy is defined
+
+    - name: Perform an Apt update/dist-upgrade before other actions run
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Create host key directory
+      file:
+        path: /host_ssh_keys
+        state: directory
+        mode: '0755'
+
+    - name: Copy host public SSH key
+      copy:
+        src: ~/.ssh/id_rsa.pub
+        dest: /host_ssh_keys/host_id_rsa.pub
+        mode: 0444
+
+    # Copy all of this content into the Debian VM so we can use it for building
+    # the Raspbian image
+    # - name: Copy this repository
+    #   copy:
+    #     src: "{{ playbook_dir }}"
+    #     dest: /opt/

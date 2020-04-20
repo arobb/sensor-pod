@@ -1,0 +1,7 @@
+---
+- name: Enable SSH
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^ENABLE_SSH=.*$'
+    line: "ENABLE_SSH=1"
