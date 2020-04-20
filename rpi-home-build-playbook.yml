@@ -10,7 +10,7 @@
     gitPath: /git
     piGenPath: "{{ gitPath }}/pi-gen"
     target_hostname: "{{ lookup('env','TARGET_HOSTNAME') }}"
-    branch: sensor-pod
-    img_name: raspbian-sensor-pod
+    branch: master
+    img_name: "raspbian-{{ target_hostname }}"
   vars_files:
     - "{{ playbook_dir }}/config.yml"

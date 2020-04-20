@@ -2,7 +2,7 @@
   git:
     repo: https://github.com/arobb/pi-gen.git
     dest: "{{ piGenPath }}"
-    version: sensor-pod
+    version: "{{ branch }}"
 
 - name: Create the config file
   file:
@@ -24,6 +24,7 @@
   shell: echo 'Acquire::http::Proxy "{{ apt_proxy }}";' > /etc/apt/apt.conf
   when: apt_proxy is defined
 
+# Pi Gen Config: APT_PROXY
 - name: Set apt proxy in Pi Gen file
   lineinfile:
     dest: "{{ piGenPath }}/config"
@@ -32,9 +33,34 @@
     line: "APT_PROXY={{ apt_proxy }}"
   when: apt_proxy is defined
 
+# Pi Gen Config: IMG_NAME
 - name: Set output image name
   lineinfile:
     dest: "{{ piGenPath }}/config"
     state: present
     regexp: '^IMG_NAME=.*$'
-    line: "IMG_NAME='raspbian-sensor-pod'"
+    line: "IMG_NAME='{{ img_name }}'"
+
+# Pi Gen Config: LOCALE_DEFAULT
+- name: Set LOCALE_DEFAULT
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^LOCALE_DEFAULT=.*$'
+    line: "LOCALE_DEFAULT='en_US.UTF-8'"
+
+# Pi Gen Config: TIMEZONE_DEFAULT
+- name: Set TIMEZONE_DEFAULT
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^TIMEZONE_DEFAULT=.*$'
+    line: "TIMEZONE_DEFAULT='America/Los_Angeles'"
+
+# Pi Gen Config: TARGET_HOSTNAME
+- name: Set eventual hostname
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^TARGET_HOSTNAME=.*$'
+    line: "TARGET_HOSTNAME='{{ target_hostname }}'"
