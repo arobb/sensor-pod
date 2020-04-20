@@ -7,6 +7,9 @@ See https://github.com/arobb/pi-gen for the build details.
 The content of this project is copied to `/vagrant` on the VM.
 
 ## Vagrant Build
+Run the commands below to build the Sensor Pod project, or a generic Raspbian build with minor customizations. (Like setting the hostname.)
+
+Don't forget to change the password!
 ```
 export START='sensor-pod'
 export TARGET_HOSTNAME='sensorpod'
