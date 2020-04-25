@@ -51,7 +51,7 @@ sudo docker run -ti --rm \
   /bin/bash
 
 # Context: Raspbian guest inside the Vagrant VM
-echo 'Acquire::http::Proxy "http://192.168.11.13:3142";' > /etc/apt/apt.conf \
+echo 'Acquire::http::Proxy "http://192.168.11.14:3142";' > /etc/apt/apt.conf \
 && apt update \
 && apt install -y openssh-server python \
 && service ssh start \
