@@ -14,14 +14,14 @@ Don't forget to change the password!
 export START='sensor-pod'
 export TARGET_HOSTNAME='sensorpod'
 vagrant up \
-vagrant ssh -c 'sudo -i bash -c "whoami; cd /git/pi-gen; pwd; ./build.sh"'
+&& vagrant ssh -c 'sudo -i bash -c "whoami; cd /git/pi-gen; pwd; ./build.sh"'
 
 or
 
 export START='rpi-home'
 export TARGET_HOSTNAME='raspberrypi'
 vagrant up \
-vagrant ssh -c 'sudo -i bash -c "whoami; cd /git/pi-gen; pwd; ./build.sh"'
+&& vagrant ssh -c 'sudo -i bash -c "whoami; cd /git/pi-gen; pwd; ./build.sh"'
 
 $ vagrant plugin install vagrant-vbguest
 $ vagrant plugin install vagrant-scp
