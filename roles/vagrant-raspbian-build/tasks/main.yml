@@ -41,6 +41,14 @@
     regexp: '^IMG_NAME=.*$'
     line: "IMG_NAME='{{ img_name }}'"
 
+# Pi Gen Config: FIRST_USER_PASS
+- name: Set FIRST_USER_PASS
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^FIRST_USER_PASS=.*$'
+    line: "FIRST_USER_PASS='{{ host_password }}'"
+
 # Pi Gen Config: LOCALE_DEFAULT
 - name: Set LOCALE_DEFAULT
   lineinfile:
