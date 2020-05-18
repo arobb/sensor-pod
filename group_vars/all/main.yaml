@@ -1,2 +1,6 @@
 ---
 host_password: "{{ vault_host_password }}"
+
+wifi_country: US
+wifi_network: "{{ vault_wifi_network }}"
+wifi_password: "{{ vault_wifi_password }}"

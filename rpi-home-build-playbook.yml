@@ -5,6 +5,7 @@
     - prerequisites
     - vagrant-raspbian-build
     - vagrant-raspbian-build-enable-ssh
+    - vagrant-raspbian-build-wifi
   remote_user: root
   vars:
     gitPath: /git

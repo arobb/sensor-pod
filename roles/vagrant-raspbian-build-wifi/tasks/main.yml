@@ -1,0 +1,36 @@
+---
+# Pi Gen Config: WPA_COUNTRY
+- name: Set WiFi country
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^WPA_COUNTRY=.*$'
+    line: "WPA_COUNTRY='{{ wifi_country }}'"
+  when: wifi_network is defined
+
+# Pi Gen Config: WPA_ESSID
+- name: Set WiFi network
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^WPA_ESSID=.*$'
+    line: "WPA_ESSID='{{ wifi_network }}'"
+  when: wifi_network is defined
+
+# Pi Gen Config: WPA_PASSWORD
+- name: Set WiFi password
+  lineinfile:
+    dest: "{{ piGenPath }}/config"
+    state: present
+    regexp: '^WPA_PASSWORD=.*$'
+    line: "WPA_PASSWORD='{{ wifi_password }}'"
+  when: wifi_password is defined
+
+# Pi Gen Config: Remove WPA RF Kill block
+# https://github.com/RPi-Distro/pi-gen/blob/master/export-noobs/00-release/files/release_notes.txt
+- name: Remove WPA RF Kill block
+  lineinfile:
+    dest: "{{ piGenPath }}/stage2/02-net-tweaks/01-run.sh"
+    state: absent
+    regexp: '^.*rfkill.*$'
+  when: wifi_network is defined
