@@ -3,6 +3,7 @@
     repo: https://github.com/arobb/pi-gen.git
     dest: "{{ piGenPath }}"
     version: "{{ branch }}"
+    force: yes
 
 - name: Create the config file
   file:
